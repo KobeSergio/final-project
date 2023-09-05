@@ -9,6 +9,7 @@ WORKDIR /seed
 
 COPY . .
 
+
 RUN python make-data.py
 
 CMD ["./generate-votes.sh"]
