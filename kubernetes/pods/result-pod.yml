@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: result-pod
+  labels:
+    app: result-pod
+spec:
+  containers:
+    - name: result-pod
+      image: kobesergio/final-project-result:1.0
+      ports:
+      - containerPort: 5001
