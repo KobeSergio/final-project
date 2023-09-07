@@ -14,14 +14,15 @@ spec:
         app: redis
     spec:
       containers:
-      - name: redis
-        image: redis:7.0-alpine3.15
-        livenessProbe:
-          exec:
-            command:
-            - /healthchecks/redis.sh
-          initialDelaySeconds: 15
-          periodSeconds: 5
+        - name: redis
+          image: redis:7.0-alpine3.15
+          livenessProbe:
+            exec:
+              command:
+              - /healthchecks/redis.sh
+            initialDelaySeconds: 15
+            periodSeconds: 5
+
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -38,19 +39,26 @@ spec:
         app: db
     spec:
       containers:
-      - name: db
-        image: postgres:14
-        env:
-          - name: POSTGRES_USER
-            value: "postgres"
-          - name: POSTGRES_PASSWORD
-            value: "postgres"
-        livenessProbe:
-          exec:
-            command:
-            - /healthchecks/postgres.sh
-          initialDelaySeconds: 15
-          periodSeconds: 5
+        - name: db
+          image: postgres:14
+          env:
+              - name: POSTGRES_USER
+                valueFrom:
+                  configMapKeyRef:
+                    name: final-project-configmap
+                    key: POSTGRES_USER
+              - name: POSTGRES_PASSWORD
+                valueFrom:
+                  configMapKeyRef:
+                    name: final-project-configmap
+                    key: POSTGRES_PASSWORD
+          livenessProbe:
+            exec:
+              command:
+              - /healthchecks/postgres.sh
+            initialDelaySeconds: 15
+            periodSeconds: 5
+          
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -67,8 +75,8 @@ spec:
         app: vote
     spec:
       containers:
-      - name: vote
-        image: kobesergio/final-project-vote:1.0
+        - name: vote
+          image: kobesergio/final-project-vote:1.0
 
 ---
 apiVersion: apps/v1
@@ -86,8 +94,8 @@ spec:
         app: result
     spec:
       containers:
-      - name: result
-        image: kobesergio/final-project-result:1.0
+        - name: result
+          image: kobesergio/final-project-result:1.0
 
 ---
 apiVersion: apps/v1
@@ -105,8 +113,8 @@ spec:
         app: worker
     spec:
       containers:
-      - name: worker
-        image: kobesergio/final-project-worker:1.0
+        - name: worker
+          image: kobesergio/final-project-worker:1.0
 
 ---
 apiVersion: apps/v1
@@ -124,5 +132,5 @@ spec:
         app: proxy
     spec:
       containers:
-      - name: proxy
-        image: nginx:1.18.0-alpine
+        - name: proxy
+          image: nginx:1.18.0-alpine
