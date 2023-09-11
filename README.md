@@ -19,7 +19,7 @@ The foundational knowledge for building this project comes from the whole bootca
 
 ### Output
 
-![Output](docs/output.jpg)
+![Output](docs/output.png)
 
 ### Architecture
 
